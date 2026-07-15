@@ -26,9 +26,15 @@ jobs:
       - name: Debug-APK bauen
         run: gradle assembleDebug
 
+      - name: Keystore wiederherstellen
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > /tmp/ks.jks
+
+      - name: Release-APK bauen (signiert)
+        run: gradle assembleRelease
+
       - name: APK als Artifact hochladen
         uses: actions/upload-artifact@v4
         with:
-          name: LgAcRemote-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: LgAcRemote-apk
+          path: app/build/outputs/apk/release/app-release.apk
           retention-days: 30
